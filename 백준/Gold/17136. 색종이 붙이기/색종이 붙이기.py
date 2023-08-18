@@ -26,11 +26,12 @@ def unVisit(size,x,y):
 # 현재 ans보다 커지면 return 
 def dfs(x,y,now):
     global ans,cnt,flag
-    if x >= 10 :
-        ans = min(now,ans)
+    if(now > ans) : return
+    if x == 10 :
+        ans = now
         flag = True
         return
-    if y >= 10 :
+    if y == 10 :
         dfs(x+1,0,now)
         return
     if paper[x][y]:
