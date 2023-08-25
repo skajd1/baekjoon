@@ -15,8 +15,9 @@ def dijk(start):
             if dist[start][v] > cur + w :
                 dist[start][v] = cur + w
                 heappush(q, [dist[start][v],v])
-    
+    dist[start][start] = 0
 for i in range(1,n+1) :
     dijk(i)
 
-print(max([dist[i][x] + dist[x][i] for i in range(1,n+1) if not x == i]))
+
+print(max([dist[i][x] + dist[x][i] for i in range(1,n+1)]))
