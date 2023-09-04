@@ -1,14 +1,22 @@
-n,k = map(int,input().split())
-arr = [list(map(int, input().split())) for _ in range(n)]
-dp = [[0]*(k+1) for _ in range(n+1)]
+import sys
 
-for i in range(1,n+1):
-	w = arr[i-1][0]
-	v = arr[i-1][1]
-	for j in range(1,k+1):
-		if w > j :
-			dp[i][j] = dp[i-1][j]
-		else :
-			dp[i][j] = max(dp[i-1][j], dp[i-1][j-w] + v)
+N, K = map(int, input().split())
+stuff = [[0,0]]
+knapsack = [[0 for _ in range(K + 1)] for _ in range(N + 1)]
 
-print(dp[-1][-1])
+for _ in range(N):
+    stuff.append(list(map(int, input().split())))
+
+
+#냅색 문제 풀이
+for i in range(1, N + 1):
+    for j in range(1, K + 1):
+        weight = stuff[i][0] 
+        value = stuff[i][1]
+       
+        if j < weight:
+            knapsack[i][j] = knapsack[i - 1][j] #weight보다 작으면 위의 값을 그대로 가져온다
+        else:
+            knapsack[i][j] = max(value + knapsack[i - 1][j - weight], knapsack[i - 1][j])
+
+print(knapsack[N][K])
