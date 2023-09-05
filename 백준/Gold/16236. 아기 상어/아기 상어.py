@@ -1,52 +1,49 @@
-from collections import deque
-n = int(input())
-board = [list(map(int, input().split())) for _ in range(n)]
-size = 2
-sizecnt = 0
-shark = []
-ans = 0
-x,y = 0,0
-for i in range(n):
-	for j in range(n):
-		if board[i][j] == 9 :
-			x = i
-			y = j
-			board[i][j] = 0
-def bfs(x,y,s):
-	q = deque()
-	q.append([x,y])
-	distance = [[0] * n for _ in range(n)]
-	visited = [[0] * n for _ in range(n)]
-	visited[x][y] = 1
-	candidate= []
-	while q :
-		xx,yy = q.popleft()
-		dx = [1,-1,0,0]
-		dy = [0,0,1,-1]
-		for i in range(4):
-			nx = xx + dx[i]
-			ny = yy + dy[i]
-			if 0<=nx<n and 0<=ny<n and not visited[nx][ny]:
-				if board[nx][ny] <= s :
-					q.append([nx,ny])
-					visited[nx][ny] = 1
-					distance[nx][ny] = distance[xx][yy] + 1
-					if 0<board[nx][ny]<s :
-						candidate.append([nx,ny,distance[nx][ny]])
-	
-	return sorted(candidate,key = lambda x : (-x[2],-x[0],-x[1]))
+N = int(input())
+space = []
+curSize = 2
+dx = [-1,0,0,1]
+dy = [0,-1,1,0]
 
-while (1):
-	if len(arr := bfs(x,y,size)) :
-		x,y,z = arr.pop()
-		ans +=z
-		board[x][y] = 0
-		sizecnt += 1
-		if sizecnt == size :
-			size += 1
-			sizecnt = 0
-		
-	else :
-		print(ans)
-		break
-	
+for n in range(N) :
+    line = list(map(int,input().split()))
+    space.append(line)
+    for l in range(len(line)) :
+        if space[n][l] == 9 :
+            space[n][l] = 0
+            cur_x, cur_y = n, l
+
+def bfs(x,y) :
+    global curSize
+    visited = [[0] * N for _ in range(N)]
+    distance = [[0] * N for _ in range(N)]
+    que = []
+    que.append([x,y])
+    arr = []
+    while que :
+        x,y = que.pop(0)
+        for i in range(4) :
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if 0 <= nx < N and 0 <= ny < N :
+                if visited[nx][ny] == 0 and space[nx][ny] <= curSize :
+                    visited[nx][ny] = 1
+                    distance[nx][ny] = distance[x][y] + 1
+                    que.append([nx,ny])
+                    if space[nx][ny] != 0 and space[nx][ny] < curSize :
+                        arr.append([nx,ny,distance[nx][ny]])
+    arr.sort(key=lambda x : (x[2],x[0],x[1]))
+    return arr
+
+answer,cnt = 0,0
+while True :
+    fishList = bfs(cur_x,cur_y)
+    if len(fishList) == 0 :
+        print(answer)
+        break
+    cur_x,cur_y,dist = fishList[0]
+    cnt += 1
+    if cnt == curSize :
+        curSize += 1
+        cnt = 0
+    answer += dist
+    space[cur_x][cur_y] = 0
