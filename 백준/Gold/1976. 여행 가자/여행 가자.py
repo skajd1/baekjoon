@@ -8,9 +8,9 @@ def union(x,y):
     X = find(x)
     Y = find(y)
     if(X==Y):
-        return False
+        return
     parents[Y] = X
-    return True
+    
 
 
 n=int(input())
@@ -24,7 +24,7 @@ for i in range(n):
         if(graph[i][j]):
             union(i+1,j+1)
 for i in range(m-1):
-    if(find(plan[i]) != find(plan[i+1])):
+    if(find(plan[0]) != find(plan[i+1])):
         ans = 'NO'
         break
 print(ans)
